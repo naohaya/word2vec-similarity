@@ -9,5 +9,5 @@ Additionally, it generates Locality Sensitive Hashing (LSH) hashes for the sente
 ## Compile and run 
 ### Compile
 `mvn clean package`
-### run
+### Run
 `mvn exec:java -Dexec.mainClass="com.example.Word2VecSimilarity"`
