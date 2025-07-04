@@ -57,6 +57,7 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 import java.io.File;
 import java.util.Scanner;
 import java.util.logging.Logger;
+import javax.crypto.SecretKey;
 
 public class Word2VecSimilarity {
 
@@ -86,7 +87,8 @@ public class Word2VecSimilarity {
     }
 
     public static void main(String[] args) throws Exception {
-        Scanner scanner = new Scanner(System.in);
+        SecretKey key = EncryptedINDArrayWriter.generateAESKey(); // AES鍵の生成
+        Scanner scanner = new Scanner(System.in); // ユーザー入力のためのスキャナー
 
         System.out.print("1つ目の文を入力してください: ");
         String sentence1 = scanner.nextLine();
@@ -100,6 +102,20 @@ public class Word2VecSimilarity {
 
         INDArray vec1 = sentenceVector(sentence1, wordVectors);
         INDArray vec2 = sentenceVector(sentence2, wordVectors);
+
+        // ★ 修正：暗号化してファイルに保存
+        // EncryptedINDArrayWriterを使用して、ベクトルを暗号化してファイルに保存
+        // ここでは、暗号化されたINDArrayをファイルに書き込むためのクラスを使用します。
+        // EncryptedINDArrayWriterは、AES暗号化を使用してINDArrayをファイルに保存します。
+        // // 事前に生成したAES鍵を使用して、INDArrayを暗号化します
+        // // そして、暗号化されたデータをファイルに書き込みます。
+        EncryptedINDArrayWriter writer = new EncryptedINDArrayWriter(key);
+        // ★ 修正：暗号化してファイルに保存
+        writer.writeEncryptedINDArrayToFile(vec1, key, "vec1.bin");
+        writer.writeEncryptedINDArrayToFile(vec2, key, "vec2.bin");
+        // ★ 修正：復号化してINDArrayを読み込む
+        vec1 = EncryptedINDArrayReader.readEncryptedINDArrayFromFile(new File("vec1.bin"), key);
+        vec2 = EncryptedINDArrayReader.readEncryptedINDArrayFromFile(new File("vec2.bin"), key);    
 
         if (vec1 == null || vec2 == null) {
             System.out.println("どちらかの文に有効な単語が含まれていません。");
