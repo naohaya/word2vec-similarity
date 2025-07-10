@@ -97,7 +97,7 @@ public class Word2VecSimilarity {
         String sentence2 = scanner.nextLine();
 
         // Word2Vecモデルの読み込み（GoogleNewsなどの事前学習モデルが必要）
-        File modelFile = new File("GoogleNews-vectors-negative300.bin"); // バイナリ形式
+        File modelFile = new File("GoogleNews-vectors-negative300.bin"); // Pre-trained Model(バイナリ形式)
         WordVectors wordVectors = WordVectorSerializer.readWord2VecModel(modelFile);
 
         INDArray vec1 = sentenceVector(sentence1, wordVectors);
